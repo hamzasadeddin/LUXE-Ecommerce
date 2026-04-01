@@ -1,0 +1,93 @@
+﻿@{
+    ViewBag.Title = "Register";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Account — LUXE</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/luxe-styles.css" asp-append-version="true" />
+</head>
+<body style="background:var(--clr-bg);">
+
+    <div class="auth-page">
+
+        <div class="auth-panel-image">
+            <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1000&q=80" alt="LUXE Fashion" />
+            <div class="auth-panel-image-overlay">
+                <div style="font-family:var(--font-display);font-size:3rem;font-weight:700;color:white;">
+                    LUXE<span style="color:var(--clr-gold);">.</span>
+                </div>
+                <p style="color:rgba(255,255,255,.75);margin-top:.5rem;font-size:1.1rem;font-style:italic;">
+                    Join the LUXE community.
+                </p>
+            </div>
+        </div>
+
+        <div class="auth-panel-form">
+            <a href="/" style="font-family:var(--font-display);font-size:2.2rem;font-weight:700;letter-spacing:.08em;color:var(--clr-dark);text-decoration:none;display:block;margin-bottom:2rem;">
+                LUXE<span style="color:var(--clr-gold);">.</span>
+            </a>
+
+            <span class="section-label">Join Us</span>
+            <h2 style="font-family:var(--font-display);font-size:2rem;margin:.5rem 0 2rem;">
+                Create Your Account
+            </h2>
+
+            @if (ViewBag.Error != null)
+            {
+                <div style="background:#f8d7da;border:1px solid #f5c2c7;border-radius:var(--radius);padding:.75rem 1rem;margin-bottom:1.5rem;font-size:.875rem;color:#842029;">
+                    <i class="fas fa-exclamation-circle me-2"></i>@ViewBag.Error
+                </div>
+            }
+
+            <form method="post" asp-controller="Account" asp-action="Register">
+                @Html.AntiForgeryToken()
+
+                <div class="mb-3">
+                    <label class="form-label-luxe">Full Name</label>
+                    <input type="text" name="fullName" class="form-control-luxe"
+                           placeholder="Jane Smith" required />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label-luxe">Email Address</label>
+                    <input type="email" name="email" class="form-control-luxe"
+                           placeholder="you@example.com" required autocomplete="email" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label-luxe">Phone <span style="color:var(--clr-text-muted);font-weight:400;text-transform:none;letter-spacing:0;">(optional)</span></label>
+                    <input type="tel" name="phone" class="form-control-luxe"
+                           placeholder="+1 555 000 0000" />
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label-luxe">Password</label>
+                    <input type="password" name="password" class="form-control-luxe"
+                           placeholder="Min. 6 characters" required minlength="6" autocomplete="new-password" />
+                </div>
+
+                <button type="submit" class="btn-luxe w-100" style="padding:.875rem;font-size:.85rem;">
+                    <i class="fas fa-user-plus me-2"></i>Create Account
+                </button>
+            </form>
+
+            <p style="text-align:center;margin-top:1.5rem;font-size:.875rem;color:var(--clr-text-muted);">
+                Already have an account?
+                <a href="/Account/Login" style="color:var(--clr-gold);font-weight:600;text-decoration:none;">
+                    Sign in
+                </a>
+            </p>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

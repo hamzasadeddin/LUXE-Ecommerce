@@ -1,0 +1,110 @@
+﻿@model List<LuxeEcommerce.Models.CartItem>
+@{
+    ViewBag.Title = "Checkout";
+    decimal subtotal = Model.Sum(c => c.Subtotal);
+    decimal shipping = subtotal > 200 ? 0 : 15;
+    decimal tax = Math.Round(subtotal * 0.08m, 2);
+    decimal total = subtotal + shipping + tax;
+}
+
+<div style="padding:3rem 0 5rem;">
+    <div class="container">
+        <h1 style="font-family:var(--font-display);font-size:2rem;margin-bottom:2.5rem;">Checkout</h1>
+        <div class="row g-5">
+            <div class="col-lg-7">
+                @using (Html.BeginForm("PlaceOrder", "Checkout", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <h5 style="font-family:var(--font-display);margin-bottom:1.5rem;">Shipping Information</h5>
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label-luxe">Full Name</label>
+                            <input name="fullName" class="form-control-luxe" placeholder="Jane Smith" required />
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label-luxe">Street Address</label>
+                            <input name="street" class="form-control-luxe" placeholder="123 Main Street" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label-luxe">City</label>
+                            <input name="city" class="form-control-luxe" placeholder="New York" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label-luxe">Country</label>
+                            <input name="country" class="form-control-luxe" placeholder="United States" required />
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label-luxe">Phone</label>
+                            <input name="phone" type="tel" class="form-control-luxe" placeholder="+1 555 000 0000" required />
+                        </div>
+                    </div>
+
+                    <h5 style="font-family:var(--font-display);margin:2.5rem 0 1.5rem;">Payment Method</h5>
+                    <div class="d-flex flex-column gap-3">
+                        <label style="border:1.5px solid var(--clr-border);border-radius:var(--radius);padding:1rem 1.25rem;cursor:pointer;display:flex;align-items:center;gap:.75rem;">
+                            <input type="radio" name="paymentMethod" value="card" checked /> Credit / Debit Card
+                        </label>
+                        <div id="pay-card" class="payment-details px-3 pb-3" style="border:1px solid var(--clr-border);border-radius:var(--radius);margin-top:-1rem;">
+                            <div class="row g-3 pt-3">
+                                <div class="col-12">
+                                    <label class="form-label-luxe">Card Number</label>
+                                    <input class="form-control-luxe" placeholder="1234 5678 9012 3456" />
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label-luxe">Expiry</label>
+                                    <input class="form-control-luxe" placeholder="MM / YY" />
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label-luxe">CVV</label>
+                                    <input class="form-control-luxe" placeholder="•••" />
+                                </div>
+                            </div>
+                        </div>
+                        <label style="border:1.5px solid var(--clr-border);border-radius:var(--radius);padding:1rem 1.25rem;cursor:pointer;display:flex;align-items:center;gap:.75rem;">
+                            <input type="radio" name="paymentMethod" value="paypal" /> PayPal
+                        </label>
+                        <div id="pay-paypal" class="payment-details d-none px-3 pb-3" style="border:1px solid var(--clr-border);border-radius:var(--radius);margin-top:-1rem;">
+                            <p style="padding-top:1rem;color:var(--clr-text-muted);font-size:.875rem;">You will be redirected to PayPal to complete your payment.</p>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-luxe-gold w-100 mt-4" style="padding:1rem;">
+                        <i class="fas fa-lock me-2"></i>Place Order — $@total.ToString("F2")
+                    </button>
+                }
+            </div>
+            <div class="col-lg-5">
+                <div class="order-summary-box">
+                    <h5 style="font-family:var(--font-display);font-size:1rem;margin-bottom:1.5rem;">Order Items (@Model.Count)</h5>
+                    @foreach (var item in Model)
+                    {
+                        <div class="d-flex gap-3 mb-3">
+                            <img src="@item.ImageUrl" style="width:60px;height:75px;object-fit:cover;border-radius:var(--radius);" />
+                            <div style="flex:1;">
+                                <div style="font-size:.875rem;font-weight:600;">@item.ProductName</div>
+                                <div style="font-size:.8rem;color:var(--clr-text-muted);">Qty @item.Quantity</div>
+                                @if (!string.IsNullOrEmpty(item.SelectedSize))
+                                {
+                                    <div style="font-size:.8rem;color:var(--clr-text-muted);">@item.SelectedSize / @item.SelectedColor</div>
+                                }
+                            </div>
+                            <div style="font-weight:600;font-size:.9rem;">$@item.Subtotal.ToString("F2")</div>
+                        </div>
+                    }
+                    <div class="order-summary-row">
+                        <span>Subtotal</span><span>$@subtotal.ToString("F2")</span>
+                    </div>
+                    <div class="order-summary-row">
+                        <span>Shipping</span><span>@(shipping == 0 ? "Free" : "$" + shipping.ToString("F2"))</span>
+                    </div>
+                    <div class="order-summary-row">
+                        <span>Tax</span><span>$@tax.ToString("F2")</span>
+                    </div>
+                    <div class="order-summary-row order-summary-total">
+                        <span>Total</span><span>$@total.ToString("F2")</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,255 @@
+﻿@{
+    ViewBag.Title = "Home";
+    var featured = ViewBag.FeaturedProducts as List<LuxeEcommerce.Models.Product>;
+    var newArrivals = ViewBag.NewArrivals as List<LuxeEcommerce.Models.Product>;
+}
+
+<section class="hero-section">
+    <div class="hero-content">
+        <span class="section-label animate-fade-up">New Season — SS 2025</span>
+
+        <h1 class="hero-tagline animate-fade-up delay-1">
+            <em>Dress with</em>
+            <strong>intention.</strong>
+            Live with style.
+        </h1>
+
+        <p class="hero-sub animate-fade-up delay-2">
+            Curated pieces crafted for the modern wardrobe.
+            Quality fabrics, timeless silhouettes, and designs that endure.
+        </p>
+
+        <div class="hero-cta-group animate-fade-up delay-3">
+            <a asp-controller="Shop" asp-action="Index" class="btn-luxe">Shop Collection</a>
+            <a asp-controller="Shop" asp-action="Index" asp-route-sort="newest" class="btn-luxe-outline">New Arrivals</a>
+        </div>
+
+        <div class="hero-scroll-hint animate-fade-up delay-4">
+            <span class="scroll-line"></span>
+            <span>Scroll to explore</span>
+        </div>
+    </div>
+
+    <div class="hero-image-panel">
+        <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=1200&q=85"
+             alt="LUXE Season Campaign" />
+    </div>
+</section>
+
+<section class="section-gap">
+    <div class="container">
+        <div class="section-header text-center reveal">
+            <span class="section-label">Browse By</span>
+            <h2 style="font-family:var(--font-display);font-size:2.8rem;font-weight:300;margin-top:.5rem;color:var(--clr-cream);">
+                Shop the <em style="color:var(--clr-gold);">Edit</em>
+            </h2>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4 reveal">
+                <a asp-controller="Shop" asp-action="Index" asp-route-category="Women" style="text-decoration:none;">
+                    <div class="category-card">
+                        <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80" alt="Women" />
+                        <div class="category-card-overlay">
+                            <span class="category-name">Women</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4 reveal" style="transition-delay:.1s">
+                <a asp-controller="Shop" asp-action="Index" asp-route-category="Men" style="text-decoration:none;">
+                    <div class="category-card">
+                        <img src="https://images.unsplash.com/photo-1480455624313-e29b44bbfde1?w=600&q=80" alt="Men" />
+                        <div class="category-card-overlay">
+                            <span class="category-name">Men</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4 reveal" style="transition-delay:.2s">
+                <a asp-controller="Shop" asp-action="Index" asp-route-category="Accessories" style="text-decoration:none;">
+                    <div class="category-card">
+                        <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&q=80" alt="Accessories" />
+                        <div class="category-card-overlay">
+                            <span class="category-name">Accessories</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-gap section-dark">
+    <div class="container">
+        <div class="section-header d-flex justify-content-between align-items-end reveal">
+            <div>
+                <span class="section-label">Curated For You</span>
+                <h2 style="font-family:var(--font-display);font-size:2.8rem;font-weight:300;margin-top:.5rem;color:var(--clr-cream);">
+                    Featured <em style="color:var(--clr-gold);">Pieces</em>
+                </h2>
+                <div class="divider-gold"></div>
+            </div>
+            <a asp-controller="Shop" asp-action="Index" class="btn-luxe-outline">View All</a>
+        </div>
+        <div class="row g-4">
+            @if (featured != null)
+            {
+                foreach (var p in featured)
+                {
+                    <div class="col-6 col-md-3 reveal">
+                        @await Html.PartialAsync("_ProductCard", p)
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</section>
+
+<section class="stats-banner">
+    <div class="container">
+        <div class="row g-4 text-center">
+            <div class="col-6 col-md-3 reveal">
+                <div class="stat-number" data-target="200" data-suffix="+">0+</div>
+                <div class="stat-label">Curated Pieces</div>
+            </div>
+            <div class="col-6 col-md-3 reveal" style="transition-delay:.1s">
+                <div class="stat-number" data-target="15" data-suffix="+">0+</div>
+                <div class="stat-label">Premium Brands</div>
+            </div>
+            <div class="col-6 col-md-3 reveal" style="transition-delay:.2s">
+                <div class="stat-number" data-target="50000" data-suffix="+">0+</div>
+                <div class="stat-label">Happy Customers</div>
+            </div>
+            <div class="col-6 col-md-3 reveal" style="transition-delay:.3s">
+                <div class="stat-number" data-target="98" data-suffix="%">0%</div>
+                <div class="stat-label">Satisfaction Rate</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section style="padding:6rem 0; background:var(--clr-bg); position:relative; overflow:hidden;">
+    <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 70% 50%, rgba(212,181,122,0.06) 0%, transparent 60%);pointer-events:none;"></div>
+    <div class="container" style="position:relative;z-index:1;">
+        <div class="row align-items-center g-5">
+            <div class="col-md-6 reveal">
+                <span class="section-label">Our Promise</span>
+                <h2 style="font-family:var(--font-display);font-size:3.2rem;font-weight:300;color:var(--clr-cream);margin:.75rem 0 1.5rem;line-height:1.1;">
+                    Crafted to Last.<br /><em style="color:var(--clr-gold);">Designed to Inspire.</em>
+                </h2>
+                <p style="color:var(--clr-text-muted);line-height:1.9;font-weight:300;margin-bottom:2rem;">
+                    Every piece in the LUXE collection is selected for quality,
+                    sustainability, and enduring style. We partner with ateliers
+                    who share our commitment to excellence.
+                </p>
+                <div class="d-flex flex-column gap-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <div style="width:36px;height:36px;border:1px solid var(--clr-border-bright);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                            <span style="color:var(--clr-gold);font-size:.8rem;">✦</span>
+                        </div>
+                        <span style="color:var(--clr-text-soft);font-size:.875rem;font-weight:300;">Free shipping on all orders over $200</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-3">
+                        <div style="width:36px;height:36px;border:1px solid var(--clr-border-bright);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                            <span style="color:var(--clr-gold);font-size:.8rem;">✦</span>
+                        </div>
+                        <span style="color:var(--clr-text-soft);font-size:.875rem;font-weight:300;">30-day hassle-free returns</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-3">
+                        <div style="width:36px;height:36px;border:1px solid var(--clr-border-bright);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                            <span style="color:var(--clr-gold);font-size:.8rem;">✦</span>
+                        </div>
+                        <span style="color:var(--clr-text-soft);font-size:.875rem;font-weight:300;">Authenticity guaranteed on every item</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 reveal" style="transition-delay:.15s">
+                <div style="position:relative;">
+                    <div style="border-radius:var(--radius-lg);overflow:hidden;aspect-ratio:4/5;">
+                        <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800&q=80"
+                             style="width:100%;height:100%;object-fit:cover;filter:brightness(0.8) contrast(1.1);" alt="Craftsmanship" />
+                    </div>
+                    <div style="position:absolute;bottom:-1.5rem;left:-1.5rem;background:var(--clr-surface);border:1px solid var(--clr-border-bright);border-radius:var(--radius-md);padding:1.25rem 1.75rem;">
+                        <div style="font-family:var(--font-display);font-size:1.5rem;font-weight:300;color:var(--clr-gold);">SS 2025</div>
+                        <div style="font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--clr-text-muted);">New Collection</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-gap section-dark">
+    <div class="container">
+        <div class="section-header text-center reveal">
+            <span class="section-label">Just Landed</span>
+            <h2 style="font-family:var(--font-display);font-size:2.8rem;font-weight:300;margin-top:.5rem;color:var(--clr-cream);">
+                New <em style="color:var(--clr-gold);">Arrivals</em>
+            </h2>
+            <div class="divider-gold mx-auto"></div>
+        </div>
+        <div class="row g-4">
+            @if (newArrivals != null)
+            {
+                foreach (var p in newArrivals)
+                {
+                    <div class="col-6 col-md-3 reveal">
+                        @await Html.PartialAsync("_ProductCard", p)
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</section>
+
+<section class="section-gap">
+    <div class="container">
+        <div class="section-header text-center reveal">
+            <span class="section-label">What They Say</span>
+            <h2 style="font-family:var(--font-display);font-size:2.8rem;font-weight:300;margin-top:.5rem;color:var(--clr-cream);">
+                Our <em style="color:var(--clr-gold);">Clients</em>
+            </h2>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4 reveal">
+                <div class="testimonial-card">
+                    <div class="star-rating mb-3">★★★★★</div>
+                    <p class="testimonial-quote">"The quality is absolutely exceptional. Every stitch is perfect and the fabric feels incredible against the skin."</p>
+                    <div class="d-flex align-items-center gap-3">
+                        <img src="https://i.pravatar.cc/100?img=1" class="testimonial-avatar" alt="Customer" />
+                        <div>
+                            <div style="font-weight:500;font-size:.875rem;color:var(--clr-cream);">Sophie Laurent</div>
+                            <div style="color:var(--clr-gold);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;">Verified Buyer</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 reveal" style="transition-delay:.12s">
+                <div class="testimonial-card">
+                    <div class="star-rating mb-3">★★★★★</div>
+                    <p class="testimonial-quote">"I've been shopping LUXE for two years. The pieces are timeless — they look just as good today as the day I bought them."</p>
+                    <div class="d-flex align-items-center gap-3">
+                        <img src="https://i.pravatar.cc/100?img=7" class="testimonial-avatar" alt="Customer" />
+                        <div>
+                            <div style="font-weight:500;font-size:.875rem;color:var(--clr-cream);">Marcus Webb</div>
+                            <div style="color:var(--clr-gold);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;">Verified Buyer</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 reveal" style="transition-delay:.24s">
+                <div class="testimonial-card">
+                    <div class="star-rating mb-3">★★★★☆</div>
+                    <p class="testimonial-quote">"Shipping was fast and the packaging was so elegant. Felt like receiving a gift. Will definitely be ordering again soon."</p>
+                    <div class="d-flex align-items-center gap-3">
+                        <img src="https://i.pravatar.cc/100?img=9" class="testimonial-avatar" alt="Customer" />
+                        <div>
+                            <div style="font-weight:500;font-size:.875rem;color:var(--clr-cream);">Amara Osei</div>
+                            <div style="color:var(--clr-gold);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;">Verified Buyer</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

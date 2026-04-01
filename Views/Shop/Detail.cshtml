@@ -1,0 +1,150 @@
+﻿@model LuxeEcommerce.Models.Product
+@{
+    ViewBag.Title = Model.Name;
+    var related = ViewBag.RelatedProducts as List<LuxeEcommerce.Models.Product>;
+}
+
+<div class="container" style="padding:3rem 0 5rem;">
+    <nav aria-label="breadcrumb" style="margin-bottom:2rem;">
+        <ol class="breadcrumb" style="font-size:.8rem;">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")" style="color:var(--clr-gold);">Home</a></li>
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Shop")" style="color:var(--clr-gold);">Shop</a></li>
+            <li class="breadcrumb-item active">@Model.Name</li>
+        </ol>
+    </nav>
+
+    <div class="row g-5">
+        <div class="col-md-6">
+            <div style="border-radius:var(--radius-lg);overflow:hidden;aspect-ratio:3/4;">
+                <img id="main-product-img" src="@Model.ImageUrl" style="width:100%;height:100%;object-fit:cover;" alt="@Model.Name" />
+            </div>
+            <div class="d-flex gap-2 mt-3 overflow-auto">
+                <img src="@Model.ImageUrl" class="thumb-img active" data-src="@Model.ImageUrl"
+                     style="width:70px;height:90px;object-fit:cover;border-radius:var(--radius);cursor:pointer;border:2px solid var(--clr-gold);" />
+                <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=300" class="thumb-img" data-src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600"
+                     style="width:70px;height:90px;object-fit:cover;border-radius:var(--radius);cursor:pointer;border:2px solid var(--clr-border);" />
+                <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300" class="thumb-img" data-src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600"
+                     style="width:70px;height:90px;object-fit:cover;border-radius:var(--radius);cursor:pointer;border:2px solid var(--clr-border);" />
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <span class="section-label">@Model.Brand</span>
+            <h1 style="font-family:var(--font-display);font-size:2rem;margin:.5rem 0 .75rem;">@Model.Name</h1>
+            <div class="d-flex align-items-center gap-2 mb-1">
+                <span class="star-rating">@(new string('★', (int)Model.Rating))</span>
+                <span style="color:var(--clr-text-muted);font-size:.85rem;">@Model.Rating / 5 (@Model.ReviewCount reviews)</span>
+            </div>
+            <div class="my-3">
+                <span style="font-family:var(--font-display);font-size:1.8rem;font-weight:700;">$@Model.Price.ToString("F2")</span>
+                @if (Model.OriginalPrice.HasValue)
+                {
+                    <span style="color:var(--clr-text-muted);text-decoration:line-through;font-size:1.1rem;margin-left:.75rem;">$@Model.OriginalPrice.Value.ToString("F2")</span>
+                    <span style="background:var(--clr-gold);color:white;font-size:.7rem;padding:.2rem .5rem;border-radius:2px;margin-left:.5rem;">-@Model.DiscountPercent%</span>
+                }
+            </div>
+            <div class="divider-gold" style="margin:1.5rem 0;"></div>
+            <p style="color:var(--clr-text-muted);line-height:1.8;">@Model.Description</p>
+
+            @if (Model.Colors != null && Model.Colors.Any())
+            {
+                <div class="mt-4">
+                    <label class="form-label-luxe">Color: <span id="selected-color" style="color:var(--clr-gold);text-transform:none;letter-spacing:0;">@Model.Colors[0]</span></label>
+                    <div class="d-flex gap-2 flex-wrap" id="color-options">
+                        @foreach (var color in Model.Colors)
+                        {
+                            <button class="filter-pill @(color == Model.Colors[0] ? "active" : "")"
+                                    onclick="selectColor(this, '@color')">
+                                @color
+                            </button>
+                        }
+                    </div>
+                </div>
+            }
+
+            @if (Model.Sizes != null && Model.Sizes.Any())
+            {
+                <div class="mt-3">
+                    <label class="form-label-luxe">Size: <span id="selected-size" style="color:var(--clr-gold);text-transform:none;letter-spacing:0;">@Model.Sizes[0]</span></label>
+                    <div class="d-flex gap-2 flex-wrap" id="size-options">
+                        @foreach (var size in Model.Sizes)
+                        {
+                            <button class="filter-pill @(size == Model.Sizes[0] ? "active" : "")"
+                                    onclick="selectSize(this, '@size')">
+                                @size
+                            </button>
+                        }
+                    </div>
+                </div>
+            }
+
+            <div class="mt-4 d-flex gap-3 align-items-center flex-wrap">
+                <div class="qty-control">
+                    <button class="qty-btn" onclick="changeDetailQty(-1)">−</button>
+                    <input type="number" id="detail-qty" value="1" min="1" class="qty-input" />
+                    <button class="qty-btn" onclick="changeDetailQty(1)">+</button>
+                </div>
+                <button class="btn-luxe flex-grow-1" onclick="addDetailToCart(@Model.Id)">
+                    <i class="fas fa-shopping-bag me-2"></i>Add to Bag
+                </button>
+                <button class="btn-luxe-outline" onclick="toggleWishlist(this)">
+                    <i class="far fa-heart"></i>
+                </button>
+            </div>
+
+            <div class="mt-4" style="border-top:1px solid var(--clr-border);padding-top:1.25rem;">
+                <div style="font-size:.8rem;color:var(--clr-text-muted);">
+                    <span style="font-weight:600;color:var(--clr-text);">Category:</span> @Model.Category &mdash; @Model.SubCategory &nbsp;|&nbsp;
+                    <span style="font-weight:600;color:var(--clr-text);">SKU:</span> LX-@Model.Id.ToString("D4")
+                </div>
+                <div class="d-flex gap-3 mt-2" style="font-size:.8rem;">
+                    <span><i class="fas fa-truck me-1 text-gold"></i>Free shipping over $200</span>
+                    <span><i class="fas fa-undo me-1 text-gold"></i>30-day returns</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (related != null && related.Any())
+    {
+        <div class="mt-5 pt-4 border-top">
+            <h3 style="font-family:var(--font-display);font-size:1.5rem;margin-bottom:2rem;">You May Also Like</h3>
+            <div class="row g-4">
+                @foreach (var p in related)
+                {
+                    <div class="col-6 col-md-3">
+                        @Html.Partial("_ProductCard", p)
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        let selectedSize = '@(Model.Sizes?.FirstOrDefault() ?? "")';
+        let selectedColor = '@(Model.Colors?.FirstOrDefault() ?? "")';
+
+        function selectSize(btn, size) {
+            selectedSize = size;
+            document.getElementById('selected-size').textContent = size;
+            document.querySelectorAll('#size-options .filter-pill').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+        function selectColor(btn, color) {
+            selectedColor = color;
+            document.getElementById('selected-color').textContent = color;
+            document.querySelectorAll('#color-options .filter-pill').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+        function changeDetailQty(delta) {
+            const input = document.getElementById('detail-qty');
+            input.value = Math.max(1, parseInt(input.value) + delta);
+        }
+        function addDetailToCart(productId) {
+            const qty = parseInt(document.getElementById('detail-qty').value);
+            addToCart(productId, qty, selectedSize, selectedColor);
+        }
+    </script>
+}

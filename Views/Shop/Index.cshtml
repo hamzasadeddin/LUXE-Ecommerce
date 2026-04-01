@@ -1,0 +1,63 @@
+﻿@model List<LuxeEcommerce.Models.Product>
+@{
+    ViewBag.Title = "Shop";
+    var selectedCategory = ViewBag.SelectedCategory as string ?? "All";
+    var selectedSort = ViewBag.SelectedSort as string ?? "default";
+    var categories = ViewBag.Categories as List<string>;
+}
+
+<div style="background:var(--clr-surface);padding:3rem 0 2rem;border-bottom:1px solid var(--clr-border);margin-bottom:2rem;">
+    <div class="container">
+        <span class="section-label">The Collection</span>
+        <h1 style="font-family:var(--font-display);font-size:2.5rem;margin-top:.5rem;">
+            @(selectedCategory == "All" ? "All Products" : selectedCategory)
+        </h1>
+        <p style="color:var(--clr-text-muted);">@Model.Count products</p>
+    </div>
+</div>
+
+<div class="container" style="padding-bottom:4rem;">
+    <!-- FILTER BAR -->
+    <div class="filter-bar">
+        @if (categories != null)
+        {
+            foreach (var cat in categories)
+            {
+                <a href="@Url.Action("Index", "Shop", new { category = cat })"
+                   class="filter-pill @(selectedCategory == cat ? "active" : "")">@cat</a>
+            }
+        }
+        <div class="ms-auto d-flex align-items-center gap-2">
+            <label style="font-size:.8rem;color:var(--clr-text-muted);">Sort:</label>
+            <select class="form-select-luxe" style="width:auto;"
+                    onchange="window.location='/Shop/Index?category=@selectedCategory&sort='+this.value">
+                <option value="default" selected="@(selectedSort == "default" ? "selected" : null)">Featured</option>
+                <option value="newest" selected="@(selectedSort == "newest" ? "selected" : null)">Newest</option>
+                <option value="price-asc" selected="@(selectedSort == "price-asc" ? "selected" : null)">Price: Low–High</option>
+                <option value="price-desc" selected="@(selectedSort == "price-desc" ? "selected" : null)">Price: High–Low</option>
+                <option value="rating" selected="@(selectedSort == "rating" ? "selected" : null)">Top Rated</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- PRODUCTS GRID -->
+    @if (Model.Any())
+    {
+        <div class="row g-4">
+            @foreach (var product in Model)
+            {
+                <div class="col-6 col-md-4 col-lg-3">
+                    @Html.Partial("_ProductCard", product)
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="text-center py-5">
+            <i class="fas fa-search" style="font-size:3rem;color:var(--clr-border);"></i>
+            <h3 style="font-family:var(--font-display);margin-top:1rem;">No products found</h3>
+            <a href="@Url.Action("Index", "Shop")" class="btn-luxe mt-3">Browse All</a>
+        </div>
+    }
+</div>

@@ -1,0 +1,119 @@
+﻿@model List<LuxeEcommerce.Models.CartItem>
+@{
+    ViewBag.Title = "Your Bag";
+    decimal subtotal = Model.Sum(c => c.Subtotal);
+    decimal shipping = subtotal > 200 ? 0 : 15;
+    decimal tax = Math.Round(subtotal * 0.08m, 2);
+    decimal total = subtotal + shipping + tax;
+}
+
+<div style="padding:3rem 0 5rem;">
+    <div class="container">
+        <h1 style="font-family:var(--font-display);font-size:2rem;margin-bottom:2rem;">
+            Your Bag
+            <span style="font-size:1rem;color:var(--clr-text-muted);font-family:var(--font-body);">(@Model.Count items)</span>
+        </h1>
+
+        @if (!Model.Any())
+        {
+            <div class="text-center py-5">
+                <i class="fas fa-shopping-bag" style="font-size:4rem;color:var(--clr-border);"></i>
+                <h3 style="font-family:var(--font-display);margin:1.5rem 0 .5rem;">Your bag is empty</h3>
+                <p style="color:var(--clr-text-muted);">Discover our curated collection and find something you love.</p>
+                <a href="@Url.Action("Index", "Shop")" class="btn-luxe mt-3">Explore Products</a>
+            </div>
+        }
+        else
+        {
+            <div class="row g-5">
+                <div class="col-lg-8">
+                    <table class="cart-table w-100">
+                        <thead>
+                            <tr>
+                                <th colspan="2">Product</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr class="cart-item-row"
+                                    data-product-id="@item.ProductId"
+                                    data-size="@item.SelectedSize"
+                                    data-color="@item.SelectedColor"
+                                    data-price="@item.Price">
+                                    <td style="width:90px;">
+                                        <img src="@item.ImageUrl" class="cart-item-img" alt="@item.ProductName" />
+                                    </td>
+                                    <td>
+                                        <div class="product-brand">@item.Brand</div>
+                                        <div style="font-weight:600;font-family:var(--font-display);">@item.ProductName</div>
+                                        @if (!string.IsNullOrEmpty(item.SelectedSize))
+                                        {
+                                            <div style="font-size:.8rem;color:var(--clr-text-muted);">Size: @item.SelectedSize</div>
+                                        }
+                                        @if (!string.IsNullOrEmpty(item.SelectedColor))
+                                        {
+                                            <div style="font-size:.8rem;color:var(--clr-text-muted);">Color: @item.SelectedColor</div>
+                                        }
+                                    </td>
+                                    <td>$@item.Price.ToString("F2")</td>
+                                    <td>
+                                        <div class="qty-control">
+                                            <button class="qty-btn" data-action="dec">−</button>
+                                            <input type="number" class="qty-input" value="@item.Quantity" min="1" />
+                                            <button class="qty-btn" data-action="inc">+</button>
+                                        </div>
+                                    </td>
+                                    <td><span class="item-subtotal">$@item.Subtotal.ToString("F2")</span></td>
+                                    <td>
+                                        <button class="navbar-icon-btn" style="color:var(--clr-text-muted);"
+                                                onclick="removeCartItem(@item.ProductId,'@item.SelectedSize','@item.SelectedColor')">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-lg-4">
+                    <div class="order-summary-box">
+                        <h5 style="font-family:var(--font-display);font-size:1.1rem;margin-bottom:1.5rem;">Order Summary</h5>
+                        <div class="order-summary-row">
+                            <span>Subtotal</span>
+                            <span>$@subtotal.ToString("F2")</span>
+                        </div>
+                        <div class="order-summary-row">
+                            <span>Shipping</span>
+                            <span>@(shipping == 0 ? "Free" : "$" + shipping.ToString("F2"))</span>
+                        </div>
+                        <div class="order-summary-row">
+                            <span>Tax (8%)</span>
+                            <span>$@tax.ToString("F2")</span>
+                        </div>
+                        <div class="order-summary-row order-summary-total">
+                            <span>Total</span>
+                            <span id="cart-total">$@total.ToString("F2")</span>
+                        </div>
+                        <a href="@Url.Action("Index", "Checkout")" class="btn-luxe w-100 text-center mt-3 d-block">
+                            Proceed to Checkout
+                        </a>
+                        <a href="@Url.Action("Index", "Shop")" class="btn-luxe-outline w-100 text-center mt-2 d-block">
+                            Continue Shopping
+                        </a>
+                        @if (subtotal < 200)
+                        {
+                            <p style="font-size:.78rem;color:var(--clr-gold);text-align:center;margin-top:.75rem;">
+                                Add $@((200 - subtotal).ToString("F2")) more for free shipping
+                            </p>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
