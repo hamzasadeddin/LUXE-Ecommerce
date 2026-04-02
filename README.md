@@ -1,9 +1,5 @@
 # LUXE — Premium Fashion E-Commerce Platform
 
-<div align="center">
-
-![LUXE Banner](https://images.unsplash.com/photo-1509631179647-0177331693ae?w=1200&q=80)
-
 **A modern, elegant e-commerce platform built with ASP.NET Core MVC**
 
 [![ASP.NET Core](https://img.shields.io/badge/ASP.NET%20Core-9.0-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
