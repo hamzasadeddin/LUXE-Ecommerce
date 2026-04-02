@@ -146,7 +146,7 @@ LuxeEcommerce/
 
 | Field | Value |
 |---|---|
-| **Email** | alex@luxe.com |
+| **Email** | hamza@luxe.com |
 | **Password** | password123 |
 
 ---
